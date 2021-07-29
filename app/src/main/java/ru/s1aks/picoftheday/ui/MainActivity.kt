@@ -1,7 +1,8 @@
-package ru.s1aks.picoftheday
+package ru.s1aks.picoftheday.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ru.s1aks.picoftheday.R
 import ru.s1aks.picoftheday.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
