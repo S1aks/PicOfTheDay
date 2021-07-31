@@ -25,7 +25,7 @@ import ru.s1aks.picoftheday.ui.nav_fragment.BottomNavigationDrawerFragment
 class MainFragment : Fragment() {
 
     private lateinit var binding: MainFragmentBinding
-    private val viewModel: MainViewModel by viewModel{
+    private val viewModel: MainViewModel by viewModel {
         parametersOf(PODRetrofitImpl())
     }
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
@@ -33,7 +33,7 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
@@ -52,8 +52,8 @@ class MainFragment : Fragment() {
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when (newState) {
-                    BottomSheetBehavior.STATE_COLLAPSED -> bottomSheetContainer.bottomSheetContainer.visibility = View.GONE
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    bottomSheetContainer.bottomSheetContainer.visibility = View.GONE
                 }
             }
 
@@ -112,8 +112,10 @@ class MainFragment : Fragment() {
                         error(R.drawable.ic_load_error_vector)
                         placeholder(R.drawable.ic_no_photo_vector)
                     }
-                    bottomSheetContainer.bottomSheetDescription.text = data.serverResponseData.explanation
-                    bottomSheetContainer.bottomSheetDescriptionHeader.text = data.serverResponseData.title
+                    bottomSheetContainer.bottomSheetDescription.text =
+                        data.serverResponseData.explanation
+                    bottomSheetContainer.bottomSheetDescriptionHeader.text =
+                        data.serverResponseData.title
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                     bottomSheetContainer.bottomSheetContainer.visibility = View.VISIBLE
                 }
@@ -128,7 +130,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setBottomAppBar(view: View) = with(binding){
+    private fun setBottomAppBar(view: View) = with(binding) {
         val context = activity as MainActivity
         context.setSupportActionBar(view.findViewById(R.id.bottom_app_bar))
         setHasOptionsMenu(true)
