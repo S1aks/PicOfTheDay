@@ -21,6 +21,7 @@ import ru.s1aks.picoftheday.model.PictureOfTheDayData
 import ru.s1aks.picoftheday.model.repository.PODRetrofitImpl
 import ru.s1aks.picoftheday.ui.MainActivity
 import ru.s1aks.picoftheday.ui.nav_fragment.BottomNavigationDrawerFragment
+import ru.s1aks.picoftheday.ui.settings.SettingsFragment
 
 class MainFragment : Fragment() {
 
@@ -88,6 +89,14 @@ class MainFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.app_bar_fav -> toast("Favourite")
+            R.id.app_bar_settings -> {
+                activity?.supportFragmentManager?.let { it
+                    .beginTransaction()
+                    .replace(R.id.container, SettingsFragment.newInstance())
+                    .addToBackStack("")
+                    .commit()
+                }
+            }
             android.R.id.home -> {
                 activity?.let {
                     BottomNavigationDrawerFragment().show(it.supportFragmentManager, "tag")
