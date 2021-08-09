@@ -4,8 +4,6 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:forceDarkAllowed">true</item>
-        <item name="fontFamily">@font/advent_pro_thin</item>
-        <item name="android:fontFamily">@font/advent_pro_thin</item>
 
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
@@ -19,7 +17,5 @@
         <item name="colorOnSurface">#212121</item>
         <item name="android:colorBackground">@color/background</item>
         <item name="colorOnBackground">#212121</item>
-        <item name="shapeAppearanceSmallComponent">@style/AppShapeAppearance.SmallComponent</item>
-        <item name="shapeAppearanceMediumComponent">@style/AppShapeAppearance.MediumComponent</item>
     </style>
 </resources>
