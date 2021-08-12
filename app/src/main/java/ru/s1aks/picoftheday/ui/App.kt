@@ -9,6 +9,8 @@ import ru.s1aks.picoftheday.di.appModule
 class App : Application() {
     companion object {
         lateinit var appInstance: App
+        const val APP_PREF_NAME = "AppSettings"
+        const val PREF_THEME_KEY = "AppTheme"
     }
 
     override fun onCreate() {
