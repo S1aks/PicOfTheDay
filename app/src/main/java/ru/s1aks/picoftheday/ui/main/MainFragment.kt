@@ -16,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.s1aks.picoftheday.R
-import ru.s1aks.picoftheday.databinding.MainFragmentBinding
+import ru.s1aks.picoftheday.databinding.MainFragmentStartBinding
 import ru.s1aks.picoftheday.model.PictureOfTheDayData
 import ru.s1aks.picoftheday.model.repository.PODRetrofitImpl
 import ru.s1aks.picoftheday.ui.MainActivity
@@ -25,7 +25,7 @@ import ru.s1aks.picoftheday.ui.settings.SettingsFragment
 
 class MainFragment : Fragment() {
 
-    private lateinit var binding: MainFragmentBinding
+    private lateinit var binding: MainFragmentStartBinding
     private val viewModel: MainViewModel by viewModel {
         parametersOf(PODRetrofitImpl())
     }
@@ -36,7 +36,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = MainFragmentBinding.inflate(inflater, container, false)
+        binding = MainFragmentStartBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -90,12 +90,9 @@ class MainFragment : Fragment() {
         when (item.itemId) {
             R.id.app_bar_fav -> toast("Favourite")
             R.id.app_bar_settings -> {
-                activity?.supportFragmentManager?.let { it
-                    .beginTransaction()
-                    .replace(R.id.container, SettingsFragment.newInstance())
-                    .addToBackStack("")
-                    .commit()
-                }
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.container, SettingsFragment.newInstance())?.addToBackStack("")
+                    ?.commit()
             }
             android.R.id.home -> {
                 activity?.let {
