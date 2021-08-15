@@ -40,12 +40,19 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/chips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="chip_today, chip_yesterday, chip_day_before_yesterday" />
+
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_today"
                 style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/chip_text_today"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintBottom_toTopOf="@id/image_view"
                 app:layout_constraintEnd_toStartOf="@id/chip_yesterday"
                 app:layout_constraintStart_toStartOf="parent"
@@ -57,6 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/chip_text_yesterday"
+                android:layout_marginStart="@dimen/center_chip_margin"
+                android:layout_marginEnd="@dimen/chip_center_margin"
                 app:layout_constraintBottom_toBottomOf="@id/chip_today"
                 app:layout_constraintEnd_toStartOf="@id/chip_day_before_yesterday"
                 app:layout_constraintStart_toEndOf="@id/chip_today"

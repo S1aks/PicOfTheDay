@@ -2,9 +2,6 @@
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="fontFamily">@font/advent_pro_thin</item>
-        <item name="android:fontFamily">@font/advent_pro_thin</item>
-
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryDark</item>
         <item name="colorOnPrimary">#FFFFFF</item>
@@ -17,18 +14,6 @@
         <item name="colorOnSurface">#212121</item>
         <item name="android:colorBackground">@color/background</item>
         <item name="colorOnBackground">#212121</item>
-        <item name="shapeAppearanceSmallComponent">@style/AppShapeAppearance.SmallComponent</item>
-        <item name="shapeAppearanceMediumComponent">@style/AppShapeAppearance.MediumComponent</item>
-    </style>
-
-    <style name="AppShapeAppearance.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">5dp</item>
-    </style>
-
-    <style name="AppShapeAppearance.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerFamily">cut</item>
-        <item name="cornerSize">5dp</item>
     </style>
 
     <style name="AppThemeLight" parent="AppTheme">
