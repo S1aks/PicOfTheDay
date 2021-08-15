@@ -5,11 +5,16 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.transition.ChangeBounds
+import androidx.transition.ChangeImageTransform
+import androidx.transition.TransitionManager
+import androidx.transition.TransitionSet
 import coil.load
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -30,7 +35,7 @@ class MainFragment : Fragment() {
         parametersOf(PODRetrofitImpl())
     }
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
-
+    private var isExpanded = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +54,7 @@ class MainFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?): Unit = with(binding) {
         super.onViewCreated(view, savedInstanceState)
-        setBottomSheetBehavior(binding.bottomSheetContainer.root)
+        setBottomSheetBehavior(bottomSheetContainer.root)
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -69,16 +74,51 @@ class MainFragment : Fragment() {
         }
         setBottomAppBar(view)
         viewModel.liveData.observe(viewLifecycleOwner, { renderData(it) })
-        viewModel.getData(0)
         chipToday.setOnClickListener {
             viewModel.getData(0)
+            chipTransform(it)
         }
         chipYesterday.setOnClickListener {
             viewModel.getData(1)
+            chipTransform(it)
         }
         chipDayBeforeYesterday.setOnClickListener {
             viewModel.getData(2)
+            chipTransform(it)
         }
+        chipToday.performClick()
+        imageView.setOnClickListener {
+            isExpanded = !isExpanded
+            TransitionManager.beginDelayedTransition(
+                root, TransitionSet()
+                    .addTransition(ChangeBounds())
+                    .addTransition(ChangeImageTransform())
+            )
+            bottomSheetContainer.bottomSheetContainer.visibility = View.GONE
+            if (isExpanded) {
+                inputLayout.visibility = View.GONE
+                chipsLayout.visibility = View.GONE
+                main.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                imageView.layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+            } else {
+                inputLayout.visibility = View.VISIBLE
+                chipsLayout.visibility = View.VISIBLE
+                main.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                imageView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+            }
+
+        }
+
+    }
+
+    private fun chipTransform(view: View) = with(binding) {
+        TransitionManager.beginDelayedTransition(root)
+        chipToday.visibility = View.VISIBLE
+        chipYesterday.visibility = View.VISIBLE
+        chipDayBeforeYesterday.visibility = View.VISIBLE
+        view.visibility = View.GONE
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -90,12 +130,9 @@ class MainFragment : Fragment() {
         when (item.itemId) {
             R.id.app_bar_fav -> toast("Favourite")
             R.id.app_bar_settings -> {
-                activity?.supportFragmentManager?.let { it
-                    .beginTransaction()
-                    .replace(R.id.container, SettingsFragment.newInstance())
-                    .addToBackStack("")
-                    .commit()
-                }
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.container, SettingsFragment.newInstance())?.addToBackStack("")
+                    ?.commit()
             }
             android.R.id.home -> {
                 activity?.let {
