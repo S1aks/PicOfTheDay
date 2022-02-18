@@ -1,9 +1,15 @@
 package ru.s1aks.picoftheday.ui.main
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.*
 import android.widget.ImageView
 import android.widget.Toast
@@ -23,16 +29,17 @@ import org.koin.core.parameter.parametersOf
 import ru.s1aks.picoftheday.R
 import ru.s1aks.picoftheday.databinding.MainFragmentBinding
 import ru.s1aks.picoftheday.model.PictureOfTheDayData
-import ru.s1aks.picoftheday.model.repository.PODRetrofitImpl
+import ru.s1aks.picoftheday.model.repository.RepositoryImpl
 import ru.s1aks.picoftheday.ui.MainActivity
 import ru.s1aks.picoftheday.ui.nav_fragment.BottomNavigationDrawerFragment
 import ru.s1aks.picoftheday.ui.settings.SettingsFragment
+import ru.s1aks.picoftheday.ui.work_list_fragment.WorkListFragment
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: MainFragmentBinding
     private val viewModel: MainViewModel by viewModel {
-        parametersOf(PODRetrofitImpl())
+        parametersOf(RepositoryImpl())
     }
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private var isExpanded = false
@@ -128,10 +135,16 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.app_bar_fav -> toast("Favourite")
+            R.id.app_bar_fav -> {
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.container, WorkListFragment.newInstance())
+                    ?.addToBackStack("")
+                    ?.commit()
+            }
             R.id.app_bar_settings -> {
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.container, SettingsFragment.newInstance())?.addToBackStack("")
+                    ?.replace(R.id.container, SettingsFragment.newInstance())
+                    ?.addToBackStack("")
                     ?.commit()
             }
             android.R.id.home -> {
@@ -158,8 +171,17 @@ class MainFragment : Fragment() {
                         error(R.drawable.ic_load_error_vector)
                         placeholder(R.drawable.ic_no_photo_vector)
                     }
+                    val spannableString = SpannableString(data.serverResponseData.explanation)
+                    spannableString.setSpan(
+                        ForegroundColorSpan(Color.RED),
+                        0, 1,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(
+                        StyleSpan(Typeface.ITALIC),
+                        0, spannableString.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                     bottomSheetContainer.bottomSheetDescription.text =
-                        data.serverResponseData.explanation
+                    spannableString
                     bottomSheetContainer.bottomSheetDescriptionHeader.text =
                         data.serverResponseData.title
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED

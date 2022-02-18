@@ -14,14 +14,14 @@ import retrofit2.Callback
 import retrofit2.Response
 import ru.s1aks.picoftheday.BuildConfig
 import ru.s1aks.picoftheday.model.PictureOfTheDayData
-import ru.s1aks.picoftheday.model.repository.PODRetrofitImpl
+import ru.s1aks.picoftheday.model.repository.RepositoryImpl
 import ru.s1aks.picoftheday.model.repository.PODServerResponseData
 import ru.s1aks.picoftheday.model.repository.Repository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class MainViewModel(
-    private val retrofitImpl: Repository = PODRetrofitImpl(),
+    private val repository: Repository = RepositoryImpl(),
 ) : ViewModel(), LifecycleObserver, CoroutineScope by MainScope() {
     val liveData: MutableLiveData<PictureOfTheDayData> = MutableLiveData()
 
@@ -41,7 +41,7 @@ class MainViewModel(
         if (apiKey.isBlank()) {
             PictureOfTheDayData.Error(Throwable("You need API key"))
         } else {
-            retrofitImpl.getRetrofitImpl()
+            repository.getRetrofitImpl()
                 .getPictureOfTheDay(apiKey, date.format(DateTimeFormatter.ISO_DATE))
                 .enqueue(object :
                     Callback<PODServerResponseData> {
