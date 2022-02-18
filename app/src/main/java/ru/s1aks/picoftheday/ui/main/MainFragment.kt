@@ -23,16 +23,17 @@ import org.koin.core.parameter.parametersOf
 import ru.s1aks.picoftheday.R
 import ru.s1aks.picoftheday.databinding.MainFragmentBinding
 import ru.s1aks.picoftheday.model.PictureOfTheDayData
-import ru.s1aks.picoftheday.model.repository.PODRetrofitImpl
+import ru.s1aks.picoftheday.model.repository.RepositoryImpl
 import ru.s1aks.picoftheday.ui.MainActivity
 import ru.s1aks.picoftheday.ui.nav_fragment.BottomNavigationDrawerFragment
 import ru.s1aks.picoftheday.ui.settings.SettingsFragment
+import ru.s1aks.picoftheday.ui.work_list_fragment.WorkListFragment
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: MainFragmentBinding
     private val viewModel: MainViewModel by viewModel {
-        parametersOf(PODRetrofitImpl())
+        parametersOf(RepositoryImpl())
     }
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private var isExpanded = false
@@ -128,10 +129,16 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.app_bar_fav -> toast("Favourite")
+            R.id.app_bar_fav -> {
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.container, WorkListFragment.newInstance())
+                    ?.addToBackStack("")
+                    ?.commit()
+            }
             R.id.app_bar_settings -> {
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.container, SettingsFragment.newInstance())?.addToBackStack("")
+                    ?.replace(R.id.container, SettingsFragment.newInstance())
+                    ?.addToBackStack("")
                     ?.commit()
             }
             android.R.id.home -> {
