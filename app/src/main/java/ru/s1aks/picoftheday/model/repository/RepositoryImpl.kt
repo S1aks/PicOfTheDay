@@ -6,9 +6,11 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.s1aks.picoftheday.model.database.Database
+import ru.s1aks.picoftheday.model.database.WorkNoteEntity
 import java.io.IOException
 
-class PODRetrofitImpl: Repository {
+class RepositoryImpl : Repository {
 
     private val baseUrl = "https://api.nasa.gov/"
 
@@ -35,4 +37,26 @@ class PODRetrofitImpl: Repository {
             return chain.proceed(chain.request())
         }
     }
+
+    override fun saveWorkNoteToDB(dbResponseData: DBResponseData) {
+        Database.db.workNotesDao().insert(convertDataToEntity(dbResponseData))
+    }
+
+    override fun getAllWorkListFromDB(): List<DBResponseData> {
+        return convertEntityToData(Database.db.workNotesDao().all())
+    }
+
+    private fun convertEntityToData(entityList: List<WorkNoteEntity>): List<DBResponseData> =
+        entityList.map {
+            DBResponseData(it.id, it.position, it.priority, it.note_title, it.note_content, it.time)
+        }
+
+    private fun convertDataToEntity(dbResponseData: DBResponseData): WorkNoteEntity =
+        WorkNoteEntity(0,
+            dbResponseData.position,
+            dbResponseData.priority,
+            dbResponseData.note_title,
+            dbResponseData.note_content,
+            dbResponseData.time
+        )
 }
